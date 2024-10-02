@@ -10,10 +10,9 @@ cat > /var/www/html/index.html << EOF
     <h1>${TITLE:-Welcome}</h1>
     ${BODY:- Please use TITLE/COLOR/BODY env variables}
 <hr>
-[v.1.0.0] (K)opiralyt 2024.
+[v.1.0.3] (K)opiralyt 2024.
 </body>
 </html>
 EOF
 
-nginx -g  "daemon off;"
-
+exec nginx -g  "daemon off;"
