@@ -9,6 +9,8 @@ cat > /var/www/html/index.html << EOF
 <body bgcolor="${COLOR:-gray}">
     <h1>${TITLE:-Welcome}</h1>
     ${BODY:- Please use TITLE/COLOR/BODY env variables}
+<hr>
+[v.1.0.0] (K)opiralyt 2024.
 </body>
 </html>
 EOF
