@@ -1,18 +1,33 @@
 services:
-  proxy:
-    image: nginxproxy/nginx-proxy:1.6
+  # proxy:
+  #   image: nginxproxy/nginx-proxy:1.6
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #     - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  traefik:
+    image: traefik:1.7-alpine
+    command:
+      - --debug
+      - --retry
+      - --rest
+      - --docker.domain=${DOMAIN:-lvh.me}
+      - --docker.network=dev_default
+      - --api.dashboard
+    labels:
+      - "traefik.frontend.rule=Host:traefik.${DOMAIN:-lvh.me}"
+      - "traefik.port=8080"
     ports:
       - 80:80
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-
+      - /var/run/docker.sock:/var/run/docker.sock
   lunch:
     image: "web:gh"
     build: .
     environment:
       - TITLE=${TITLE:-Lunchtime [dev]}
       - COLOR=${COLOR:-yellow}
-      - VIRTUAL_HOST=lunch.lvh.me
     ports:
       - 80
   database:
@@ -24,8 +39,6 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
   adminer:
     image: adminer
-    environment:
-      - VIRTUAL_HOST=db.lvh.me
     ports:
       - 8080
 
